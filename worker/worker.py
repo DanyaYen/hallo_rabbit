@@ -109,7 +109,7 @@ def main():
         except pika.exceptions.AMQPConnectionError as e:
             print(f" [!] AMQP Connection Error: {e}. Retrying in 5 seconds...")
             time.sleep(5)
-        except KeyboardInterrupt: # Не всегда срабатывает в Docker
+        except KeyboardInterrupt: 
             print(" [*] Worker stopping due to KeyboardInterrupt.")
             if 'channel' in locals() and channel.is_open:
                 channel.close()
