@@ -1,0 +1,45 @@
+
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_server
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      - TZ=Europe/Kyiv
+
+  webapp:
+    build: ./webapp
+    container_name: image_webapp
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./processed_images:/app/processed_images 
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - FLASK_ENV=development 
+      - FLASK_DEBUG=1
+      - TZ=Europe/Kyiv
+
+  worker:
+    build: ./worker
+    container_name: image_worker_1 
+    volumes:
+      - ./uploads:/app/uploads:ro 
+      - ./processed_images:/app/processed_images
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - TZ=Europe/Kyiv
+
+
+volumes:
+  rabbitmq_data:

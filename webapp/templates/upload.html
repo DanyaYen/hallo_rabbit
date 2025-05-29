@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Upload Image for Processing</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; }
+        form { margin-bottom: 20px; }
+        input[type=file], select, input[type=submit] { margin-bottom: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; }
+        input[type=submit] { background-color: #007bff; color: white; cursor: pointer; }
+        input[type=submit]:hover { background-color: #0056b3; }
+        .flashes { list-style: none; padding: 0; }
+        .flashes li { padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .flashes li { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; } /* Info-like flash */
+        .processed-list { list-style: none; padding: 0; }
+        .processed-list li { background-color: #e9ecef; padding: 8px; margin-bottom: 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload New Image for Processing</h1>
+        <form method=post enctype=multipart/form-data>
+          <p><input type=file name=file required></p>
+          <p>
+            <label for="action">Action:</label>
+            <select name="action" id="action">
+              <option value="resize">Resize (300x300)</option>
+              <option value="grayscale">Grayscale</option>
+              <option value="thumbnail">Thumbnail (100x100)</option>
+            </select>
+          </p>
+          <p><input type=submit value=Upload></p>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <h2>Processed Images:</h2>
+        {% if processed_files %}
+            <ul class="processed-list">
+            {% for file in processed_files %}
+                <li>{{ file }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No processed images yet. Check the 'processed_images' folder in your project directory.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
